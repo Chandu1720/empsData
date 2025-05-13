@@ -30,6 +30,7 @@
     <table border="2px">
         <thead>
             <tr>
+            <th rowspan="2">s.no</th>
             <th rowspan="2">id</th>
             <th rowspan="2">name</th>
             <th rowspan="2">email</th>
@@ -59,7 +60,7 @@
     fetch(url)
     .then((res)=>res.json())
     .then((data)=>{
-        data.forEach(ele => {
+        data.forEach((ele,i) => {
             let tbody=document.getElementById('table-body')
             let row = document.createElement('tr');
             let cell0=document.createElement('td');
@@ -80,7 +81,7 @@
             let cell15=document.createElement('td');
            cell15.innerHTML=`<button>EDIT</button>`
            cell5.innerHTML=`<button>del</button>`
-            // cell0.textContent=`${index}+1`
+            cell0.textContent=`${i+1}`
             cell1.textContent=`${ele.id}`
             cell2.textContent=`${ele.name}`
             cell3.textContent=`${ele.email}`
@@ -94,6 +95,7 @@
             cell12.textContent=`${ele.experience}`
             cell13.textContent=`${ele.revenue_target}`
             cell14.textContent=`${ele.reporting_manager}`
+            row.appendChild(cell0)
             row.appendChild(cell1)
             row.appendChild(cell2)
             row.appendChild(cell3)
@@ -113,5 +115,7 @@
             
         });
     })
+    .catch((err)=>console.log(err)
+    )
 </script>
 </html>
