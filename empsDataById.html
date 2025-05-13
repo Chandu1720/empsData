@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FETCH_ID</title>
+
+    <style>
+        .box{
+            display: block;
+            margin: 25px;
+            margin-inline-start: 20%;
+        }
+        .btn{
+            border: 1pax black;
+            background: none;
+            inline-size: 100px;
+            padding: 5px;
+        }
+        .btn:hover{
+            cursor: pointer;
+            border: 2px white;
+            background: black;
+            color: white;
+        }
+       
+        .box input,label{
+            border: 2px solid whitesmoke;
+            padding: 5px;
+        }
+        .box input{
+            border: 2PX solid black;
+        }
+        table{
+            /* margin-inline-start: 20%; */
+            text-align: center;
+            border-collapse: collapse;
+        }
+        h1{
+            margin: 50px;
+            margin-inline-start: 20%;
+
+        }
+    </style>
+</head>
+<body>
+    <h1>THIS is GET DATA USING ID</h1>
+   <div class="box"> <label for="input">enteremp_id</label>
+    <input type="text"  id="client_id" min="1" placeholder="Enter client_id">
+    <button class="btn" onclick="search()">Search</button>
+    </div>
+        <table border="2px">
+        <thead>
+            <tr>
+            <th rowspan="2">s.no</th>
+            <th rowspan="2">id</th>
+            <th rowspan="2">name</th>
+            <th rowspan="2">email</th>
+            <th rowspan="2">mobile_number</th>
+            <th rowspan="2">date_of_joinning</th>
+            <th rowspan="2">job_role</th>
+            <th rowspan="2">location</th>
+            <th rowspan="2">department</th>
+            <th rowspan="2">sub_department</th>
+            <th rowspan="2">salary</th>
+            <th rowspan="2">experience</th>
+            <th rowspan="2">revenue_target</th>
+            <th rowspan="2">reporting_manager</th>
+            <th colspan="2">actions</th>
+            </tr>
+            <tr>
+                <th>EDIT</th>
+                <th>DEL</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+    <script>
+    let tbody = document.getElementById('table-body');
+    function getclient(id) {
+        let url = `https://rms-m7sb.onrender.com/employee/${id}`;
+
+fetch(url)
+.then((res) => res.json())
+.then((ele) => {;
+
+if (!ele.id ) {
+            alert(`Client ID ${id} does not exist.`);
+            return;
+        }
+    tbody.innerHTML=''
+            let row = document.createElement('tr');
+            let cell0=document.createElement('td');
+            let cell1=document.createElement('td');
+            let cell2=document.createElement('td');
+            let cell3=document.createElement('td');
+            let cell4=document.createElement('td');
+            let cell5=document.createElement('td');
+            let cell6=document.createElement('td');
+            let cell7=document.createElement('td');
+            let cell8=document.createElement('td');
+            let cell9=document.createElement('td');
+            let cell10=document.createElement('td');
+            let cell11=document.createElement('td');
+            let cell12=document.createElement('td');
+            let cell13=document.createElement('td');
+            let cell14=document.createElement('td');
+            let cell15=document.createElement('td');
+           cell15.innerHTML=`<button>EDIT</button>`
+           cell5.innerHTML=`<button>del</button>`
+            cell0.textContent=`${ele.id}`
+            cell1.textContent=`${ele.id}`
+            cell2.textContent=`${ele.name}`
+            cell3.textContent=`${ele.email}`
+            cell4.textContent=`${ele.mobile_number}`
+            cell6.textContent=`${ele.date_of_joinning}`
+            cell7.textContent=`${ele.job_role}`
+            cell8.textContent=`${ele.location}`
+            cell9.textContent=`${ele.department}`
+            cell10.textContent=`${ele.sub_department}`
+            cell11.textContent=`${ele.salary}`
+            cell12.textContent=`${ele.experience}`
+            cell13.textContent=`${ele.revenue_target}`
+            cell14.textContent=`${ele.reporting_manager}`
+            row.appendChild(cell0)
+            row.appendChild(cell1)
+            row.appendChild(cell2)
+            row.appendChild(cell3)
+            row.appendChild(cell4)
+            row.appendChild(cell6)
+            row.appendChild(cell7)
+            row.appendChild(cell8)
+            row.appendChild(cell9)
+            row.appendChild(cell10)
+            row.appendChild(cell11)
+            row.appendChild(cell12)
+            row.appendChild(cell13)
+            row.appendChild(cell14)
+            row.appendChild(cell5)
+            row.appendChild(cell15)
+
+  tbody.appendChild(row);
+})
+
+.catch((err) => console.log(err))
+     }
+ function search(){  
+    let client_id=document.getElementById('client_id').value       
+     if(client_id)
+     {
+        console.log(client_id);
+        
+        getclient(client_id);
+     }
+     else{
+        console.log("enter id");
+     }
+ }
+</script>
+</body>
+</html>
