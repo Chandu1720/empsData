@@ -235,6 +235,7 @@
     </div>
   </div>
 </div>
+<div id="table">
  <table border="2px">
         <thead>
             <tr>
@@ -262,6 +263,7 @@
         <tbody id="table-body">
         </tbody>
     </table>
+    </div>
 </body>
 <script>
    function getData()
@@ -378,6 +380,9 @@ function openModal() {
     .then((res) => res.json())
     .then((data) => {
       alert("Employee added successfully!");
+      document.getElementById("table-body").innerHTML = "";
+      getData()
+      closeModal();
       console.log(data);
     })
     .catch((err) => {
@@ -410,7 +415,7 @@ submit.setAttribute('onclick', `event.preventDefault(); update(${empdata.id});`)
      document.getElementById("expid").value=empdata.experience
      document.getElementById("revid").value=empdata.revenue_target
      document.getElementById("onid").value=empdata.onboards
-     document.getElementById("repid").value=" "
+     document.getElementById("repid").value=empdata.reporting_manager||"N/A"
 
 
 }
@@ -427,7 +432,7 @@ function update(id){
     let experience=document.getElementById("expid").value
     let revenue_target=document.getElementById("revid").value
     let onboards=document.getElementById("onid").value
-    let reporting_to=document.getElementById("repid").value
+    let reporting_to="Admin"
     let emp={
                 "name": name,
                 "email": email,
@@ -449,8 +454,11 @@ function update(id){
             body: JSON.stringify(emp)
            })
            .then((res)=>res.json())
-           .then((data)=>{ alert(`${id} is updated`); console.log(data)})
-           .catch((err)=>{ alert(`${id}is not updted `) ;console.log(err)
+           .then((data)=>{ alert(`${emp.name} is updated`);
+             closeModal(); 
+             console.log(data);
+            })
+           .catch((err)=>{ alert(`${emp.name}is not updted `) ;console.log(err)
            })
          
            
@@ -468,6 +476,13 @@ function delData(id) {
     })
     .catch(err => alert("Failed to delete"));
   }
+}
+function delAllData(){
+    if(confirm("Are you sure"))
+{
+    let table=document.getElementById("table")
+    table.innerHTML="<h2>No Data</h2>"
+}
 }
 
 </script>
