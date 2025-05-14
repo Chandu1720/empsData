@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmpsGetdata</title>
     <style>
-         body {
+         /* body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
       margin: 0;
       padding: 0;
-    }
+    } */
     .modal {
       display: none; 
       position: fixed;
@@ -125,14 +125,25 @@
             border: none;
             border-radius: 5px;
         }
-          .btn:hover{
+        #deid,#edid{
+            /* margin:0 25%; */
+            /* margin: 10px; */
+            padding: 10px;
+            /* inline-size: 50px; */
+            color: cornsilk;
+            background-color: rgba(255, 4, 4, 0.92);
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+          .btn:hover,#deid:hover{
          background-color: rgb(255, 0, 0);
          box-shadow: 1px 1px 4px 2px rgba(0, 0, 0, 0.344);
         }
-        .newbtn{
+        .newbtn,#edid{
             background: #0b058b;
         }
-          .newbtn:hover{
+          .newbtn:hover,#edid:hover{
          background-color: rgb(2, 8, 90);
          box-shadow: 1px 1px 4px 2px rgba(0, 0, 0, 0.344);
         }
@@ -140,9 +151,9 @@
             inline-size: 100%;
             display: flex;
             flex-direction: row;
-            justify-content: end;
+            justify-content: center;
         }
-         
+
     </style>
 </head>
 <body>
@@ -156,7 +167,7 @@
   <div id="employeeModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h2>Add New Employee</h2>
+      <h2 id="head">Add New Employee</h2>
       <span class="close-btn" onclick="closeModal()">&times;</span>
     </div>
     <div class="modal-body">
@@ -217,7 +228,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn-primary" onclick="event.preventDefault(); addNew()" >Submit</button>
+          <button type="submit" class="btn-primary"  id="subbtnid" >Submit</button>
         </div>
       </form>
     </div>
@@ -277,8 +288,8 @@
             let cell13=document.createElement('td');
             let cell14=document.createElement('td');
             let cell15=document.createElement('td');
-           cell15.innerHTML=`<button>EDIT</button>`
-           cell5.innerHTML=`<button>del</button>`
+           cell15.innerHTML=`<button id="deid" onclick="delData(${ele.id})">DEL</button>`
+           cell5.innerHTML=`<button id="edid" onclick="editData(${ele.id})">EDIT</button>`
             cell0.textContent=`${i+1}`
             cell1.textContent=`${ele.id}`
             cell2.textContent=`${ele.name}`
@@ -292,7 +303,7 @@
             cell11.textContent=`${ele.salary}`
             cell12.textContent=`${ele.experience}`
             cell13.textContent=`${ele.revenue_target}`
-            cell14.textContent=`${ele.reporting_manager}`
+            cell14.textContent = ele.reporting_manager?.name || "N/A";
             row.appendChild(cell0)
             row.appendChild(cell1)
             row.appendChild(cell2)
@@ -320,6 +331,7 @@
     let emps=[]
 function openModal() {
     document.getElementById("employeeModal").style.display = "block";
+    document.getElementById("subbtnid").setAttribute("onclick","event.preventDefault(); addNew()")
   }
 
  function closeModal() {
@@ -372,5 +384,90 @@ function openModal() {
       alert("Failed to add employee.");
     });
 }
+function editData(id){
+    
+    fetch(`https://rms-m7sb.onrender.com/employee/${id}`)
+    .then((res)=>res.json())
+    .then((data)=>openeditModal(data))
+}
+function openeditModal(empdata){ console.log(empdata)
+    let head=document.getElementById('head')
+    head.textContent="Modifey The changes"
+    
+    let submit=document.getElementById('subbtnid')
+submit.setAttribute('onclick', `event.preventDefault(); update(${empdata.id});`);
+     document.getElementById("employeeModal").style.display = "block";
+     document.getElementById("nameid").value =empdata.name
+     document.getElementById("mailid").value=empdata.email
+     document.getElementById("numid").value=empdata.mobile_number
+     document.getElementById("did").value=empdata.date_of_joinning
+     document.getElementById("jid").value=empdata.job_role
+     document.getElementById("locid").value=empdata.location
+     document.getElementById("depid").value=empdata.department
+     document.getElementById("subid").value=empdata.sub_department
+     document.getElementById("sid").value=empdata.salary
+     document.getElementById("expid").value=empdata.experience
+     document.getElementById("revid").value=empdata.revenue_target
+     document.getElementById("onid").value=empdata.onboards
+     document.getElementById("repid").value=" "
+
+
+}
+function update(id){
+    let name=document.getElementById("nameid").value
+    let email=document.getElementById("mailid").value
+    let mobile_number=document.getElementById("numid").value
+    let date_of_joinning=document.getElementById("did").value
+    let job_role=document.getElementById("jid").value
+    let location=document.getElementById("locid").value
+    let department=document.getElementById("depid").value
+    let sub_department=document.getElementById("subid").value
+    let salary=document.getElementById("sid").value
+    let experience=document.getElementById("expid").value
+    let revenue_target=document.getElementById("revid").value
+    let onboards=document.getElementById("onid").value
+    let reporting_to=document.getElementById("repid").value
+    let emp={
+                "name": name,
+                "email": email,
+                "mobile_number": mobile_number,
+                "date_of_joinning": date_of_joinning,
+                "job_role": job_role,
+                "location": location,
+                "department": department,
+                "sub_department": sub_department,
+                "salary": salary,
+                "experience": experience,
+                "revenue_target": revenue_target,
+                "onboards": onboards,
+                "reporting_to": reporting_to
+           }
+           fetch(`https://rms-m7sb.onrender.com/employee/${id}/update`,{
+            method:"PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(emp)
+           })
+           .then((res)=>res.json())
+           .then((data)=>{ alert(`${id} is updated`); console.log(data)})
+           .catch((err)=>{ alert(`${id}is not updted `) ;console.log(err)
+           })
+         
+           
+}
+function delData(id) {
+  if (confirm("Are you sure you want to delete this employee?")) {
+    fetch(`https://rms-m7sb.onrender.com/employee/${id}/delete`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(() => {
+      alert("Employee deleted.");
+      document.getElementById("table-body").innerHTML = "";
+      getData();
+    })
+    .catch(err => alert("Failed to delete"));
+  }
+}
+
 </script>
 </html>
